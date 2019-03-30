@@ -1,13 +1,15 @@
 package com.androidstudy.andelamedmanager.data.model;
 
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import java.util.Date;
 
 @Entity
-public class
-Medicine {
+public class Medicine implements Parcelable {
     @PrimaryKey(autoGenerate = true)
     private long medicineId;
     // private long userId;
@@ -32,6 +34,31 @@ Medicine {
         this.endDate = endDate;
         this.days = days;
     }
+
+    @Ignore
+    protected Medicine(Parcel in) {
+        medicineId = in.readLong();
+        name = in.readString();
+        description = in.readString();
+        interval = in.readString();
+        pills = in.readString();
+        pillsTaken = in.readString();
+        hasNotification = in.readByte() != 0;
+        days = in.readInt();
+    }
+
+    @Ignore
+    public static final Creator<Medicine> CREATOR = new Creator<Medicine>() {
+        @Override
+        public Medicine createFromParcel(Parcel in) {
+            return new Medicine(in);
+        }
+
+        @Override
+        public Medicine[] newArray(int size) {
+            return new Medicine[size];
+        }
+    };
 
     public long getMedicineId() {
         return medicineId;
@@ -111,5 +138,24 @@ Medicine {
 
     public void setDays(int days) {
         this.days = days;
+    }
+
+    @Ignore
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Ignore
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(medicineId);
+        dest.writeString(name);
+        dest.writeString(description);
+        dest.writeString(interval);
+        dest.writeString(pills);
+        dest.writeString(pillsTaken);
+        dest.writeByte((byte) (hasNotification ? 1 : 0));
+        dest.writeInt(days);
     }
 }

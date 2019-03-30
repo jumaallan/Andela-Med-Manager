@@ -250,9 +250,8 @@ public class AddMedicineActivity extends AppCompatActivity {
         Bundle bundle = new Bundle();
         //TODO :: Change this :)
         //TODO :: CALCULATE PILLS
-        /**
-         * Pass data via Bundle
-         */
+
+        //Pass data via Bundle
         bundle.putString("name", name);
         bundle.putString("description", description);
         bundle.putString("interval", String.valueOf(interval));

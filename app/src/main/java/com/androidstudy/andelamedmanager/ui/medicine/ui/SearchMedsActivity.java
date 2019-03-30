@@ -77,20 +77,12 @@ public class SearchMedsActivity extends AppCompatActivity {
         monthlyIntakeAdapter = new MonthlyIntakeAdapter(this, medicineList, (v, position) -> {
             Medicine medicine = medicineList.get(position);
             Intent intent = new Intent(getApplicationContext(), MedicineActivity.class);
-            Bundle b = new Bundle();
 
-            b.putString("name", medicine.getName());
-            b.putString("description", medicine.getDescription());
-            b.putString("interval", medicine.getInterval());
-            b.putString("pills", medicine.getPills());
-            b.putString("pillsTaken", medicine.getPillsTaken());
-            b.putBoolean("true", medicine.isHasNotification());
-            b.putString("startDate", String.valueOf(medicine.getStartDate()));
-            b.putString("endDate", String.valueOf(medicine.getEndDate()));
-            b.putInt("days", medicine.getDays());
+            Bundle b = new Bundle();
+            b.putParcelable("MEDICINE", medicine);
+
             intent.putExtras(b);
             startActivity(intent);
-
         });
         LinearLayoutManager mLayoutManager =
                 new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);

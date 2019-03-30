@@ -2,14 +2,10 @@ package com.androidstudy.andelamedmanager.ui.auth.viewmodel;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
-import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
 
 import com.androidstudy.andelamedmanager.data.AppDatabase;
-import com.androidstudy.andelamedmanager.data.model.Medicine;
 import com.androidstudy.andelamedmanager.data.model.User;
-
-import java.util.List;
 
 public class AddUserViewModel extends AndroidViewModel {
     private AppDatabase appDatabase;
@@ -35,7 +31,7 @@ public class AddUserViewModel extends AndroidViewModel {
 
         @Override
         protected Void doInBackground(final User... params) {
-            db.userDao().addUser(params[0]);
+            db.userDao().insertData(params[0]);
             return null;
         }
 

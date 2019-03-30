@@ -33,7 +33,7 @@ public class AddMedicineViewModel extends AndroidViewModel {
 
         @Override
         protected Void doInBackground(final Medicine... params) {
-            db.medicineDao().addMedicine(params[0]);
+            db.medicineDao().insertData(params[0]);
             return null;
         }
     }

@@ -39,7 +39,7 @@ public class MedicineViewModel extends AndroidViewModel {
 
         @Override
         protected Void doInBackground(final Medicine... params) {
-            db.medicineDao().deleteMedicine(params[0]);
+            db.medicineDao().deleteData(params[0]);
             return null;
         }
 

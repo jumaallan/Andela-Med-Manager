@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.androidstudy.andelamedmanager.R;
 import com.androidstudy.andelamedmanager.data.model.MedData;
+import com.androidstudy.andelamedmanager.data.model.Medicine;
 import com.androidstudy.andelamedmanager.ui.medicine.adapter.MedicineSparkAdapter;
 import com.robinhood.spark.SparkView;
 
@@ -66,16 +67,18 @@ public class MedicineActivity extends AppCompatActivity {
         Bundle b = in.getExtras();
 
         assert b != null;
-        textViewMedicineName.setText(b.getString("name"));
+        Medicine medicine = b.getParcelable("MEDICINE");
+        assert medicine != null;
+        textViewMedicineName.setText(medicine.getName());
         //Calculate Percentage
-        int takePercentage = (Integer.parseInt(b.getString("pillsTaken")) * 100 / Integer.parseInt(b.getString("pills")));
+        int takePercentage = (Integer.parseInt(medicine.getPillsTaken()) * 100 / Integer.parseInt(medicine.getPills()));
         textViewMedicinePercentage.setText(String.format("%d%s", 100 - takePercentage, getString(R.string.percentage)));
 
-        textViewMedDescription.setText(b.getString("description"));
-        textViewInterval.setText(b.getString("interval") + " Times");
-        textViewMedPills.setText(b.getString("pills"));
+        textViewMedDescription.setText(medicine.getDescription());
+        textViewInterval.setText(medicine.getInterval() + " Times");
+        textViewMedPills.setText(medicine.getPills());
 
-        switch (b.getString("interval")) {
+        switch (medicine.getInterval()) {
             case "1":
                 textViewOne.setText("8:00 AM");
                 break;

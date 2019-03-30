@@ -39,9 +39,7 @@ public class MainDashboardAdapter extends RecyclerView.Adapter<MainDashboardAdap
     @Override
     public void onBindViewHolder(MenuOptionsViewHolder holder, int position) {
         MenuView menuItem = menuList.get(position);
-
-        holder.textView.setText(menuItem.getName());
-        holder.imageView.setImageResource(menuItem.getImage());
+        holder.bindData(menuItem);
     }
 
     @Override
@@ -59,6 +57,11 @@ public class MainDashboardAdapter extends RecyclerView.Adapter<MainDashboardAdap
         public MenuOptionsViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+        }
+
+        private void bindData(MenuView menuItem) {
+            textView.setText(menuItem.getName());
+            imageView.setImageResource(menuItem.getImage());
         }
     }
 

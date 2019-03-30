@@ -87,6 +87,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     SimpleDateFormat simpleDateFormat;
     User user;
     AlarmManager alarmManager;
+    private MainViewModel mainViewModel;
     private ProfileDialog profileDialog;
     private SnackProgressBarManager snackProgressBarManager;
     private GoogleApiClient mGoogleApiClient;
@@ -99,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         super.onCreate(savedInstanceState);
 
         ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-        MainViewModel mainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+        mainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
         user = mainViewModel.getUserLiveData();
         binding.setUser(user);
 
@@ -186,16 +187,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 Medicine medicine = medicineList.get(position);
                 Intent intent = new Intent(getApplicationContext(), MedicineActivity.class);
                 Bundle b = new Bundle();
+                b.putParcelable("MEDICINE", medicine);
 
-                b.putString("name", medicine.getName());
-                b.putString("description", medicine.getDescription());
-                b.putString("interval", medicine.getInterval());
-                b.putString("pills", medicine.getPills());
-                b.putString("pillsTaken", medicine.getPillsTaken());
-                b.putBoolean("true", medicine.isHasNotification());
-                b.putString("startDate", String.valueOf(medicine.getStartDate()));
-                b.putString("endDate", String.valueOf(medicine.getEndDate()));
-                b.putInt("days", medicine.getDays());
                 intent.putExtras(b);
                 startActivity(intent);
             });
@@ -213,16 +206,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 Medicine medicine = medicineList.get(position);
                 Intent intent = new Intent(MainActivity.this.getApplicationContext(), MedicineActivity.class);
                 Bundle b = new Bundle();
-
-                b.putString("name", medicine.getName());
-                b.putString("description", medicine.getDescription());
-                b.putString("interval", medicine.getInterval());
-                b.putString("pills", medicine.getPills());
-                b.putString("pillsTaken", medicine.getPillsTaken());
-                b.putBoolean("true", medicine.isHasNotification());
-                b.putString("startDate", String.valueOf(medicine.getStartDate()));
-                b.putString("endDate", String.valueOf(medicine.getEndDate()));
-                b.putInt("days", medicine.getDays());
+                b.putParcelable("MEDICINE", medicine);
                 intent.putExtras(b);
                 MainActivity.this.startActivity(intent);
             });
@@ -260,7 +244,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 //        alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
 //                triggerTime, repeatInterval, notifyPendingIntent);
 
-        //TODO :: REwork this
+        //TODO :: Rework this
         //Cancel the alarm and notification if the alarm is turned off
 //        alarmManager.cancel(notifyPendingIntent);
 //        mNotificationManager.cancelAll();
@@ -333,13 +317,14 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(status -> {
             //Clear Shared Pref File
             Settings.setLoggedInSharedPref(false);
-            //Clear Local DB
-            //TODO :: CLEAR DB
-
-            //Redirect User to Login Page
-            Intent intent = new Intent(getApplicationContext(), AuthActivity.class);
-            startActivity(intent);
-            finish();
+            if (status.isSuccess()) {
+                //Clear Local DB
+                mainViewModel.deleteAll();
+                //Redirect User to Login Page
+                Intent intent = new Intent(getApplicationContext(), AuthActivity.class);
+                startActivity(intent);
+                finish();
+            }
         });
 
         //Unreachable anyway
